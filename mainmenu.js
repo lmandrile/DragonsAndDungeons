@@ -1,16 +1,29 @@
 import React from 'react';
 import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
-
+import {tcpServer, tcpClient} from './TCPCommunication.js'
 
 export class MainMenu extends React.Component {
 
+
+
     _onPressServerButton() {
-      Alert.alert("Start server!")
+      //Alert.alert("Start server!");
+      console.log("hello");
+      tcppServer = new tcpServer(1234, function(connection){
+        Alert.alert("we got something")
+      }, function(data) {
+          Alert.alert(""+data);
+      },
+      function(error) {
+        Alert.alert("Got an error");
+    });
       // TODO: start server and go to DM page
     }
-  
+
     _onPressClientButton() {
-      Alert.alert("Start client!")
+      //Alert.alert("Start client!")
+      tcppClient = new tcpClient(1234, function(){}, function(){}, function(){})
+      tcppClient.write('Here is some data');
       // TODO: start client and go to player page
     }
   

@@ -1,18 +1,21 @@
 import React from 'react';
 import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
-import {tcpServer, tcpClient} from './TCPCommunication.js'
-
-export class MainMenu extends React.Component {
+import {tcpServer, tcpClient} from './../TCPCommunication.js'
 
 
 
+export class MainMenuScreen extends React.Component {
+
+  // TODO EVENTUALLY DELETE
     _onPressServerButton() {
       //Alert.alert("Start server!");
       console.log("hello");
+
+      //Example server setup
       tcppServer = new tcpServer(1234, function(connection){
         Alert.alert("we got something")
       }, function(data) {
-          Alert.alert(""+data);
+          Alert.alert(""  + data);
       },
       function(error) {
         Alert.alert("Got an error");
@@ -20,25 +23,29 @@ export class MainMenu extends React.Component {
       // TODO: start server and go to DM page
     }
 
+      // TODO EVENTUALLY DELETE
     _onPressClientButton() {
       //Alert.alert("Start client!")
+
+      //Example client setup
       tcppClient = new tcpClient(1234, function(){}, function(){}, function(){})
       tcppClient.write('Here is some data');
       // TODO: start client and go to player page
+      
     }
   
     render() {
       return (
         <View style={styles.container}>
           <TouchableHighlight 
-          onPress={this._onPressServerButton} 
+          onPress={() => this.props.navigation.navigate('serverEnterPortScreen')} 
           underlayColor="white" 
           style={[styles.button, {backgroundColor: 'red'}]}
           >
             <Text style={styles.buttonText}>Start Server</Text>
           </TouchableHighlight>
           <TouchableHighlight 
-          onPress={this._onPressClientButton} 
+          onPress={() => this.props.navigation.navigate('clientServerSelectScreen')} 
           underlayColor="white" 
           style={[styles.button, {backgroundColor: 'blue'}]}
           >
@@ -66,3 +73,4 @@ buttonText: {
     fontSize: 30
 }
 });
+

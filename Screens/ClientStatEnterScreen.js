@@ -1,12 +1,15 @@
 import React from 'react';
 import { Alert, TouchableHighlight, StyleSheet, Text, View, TextInput } from 'react-native';
+import { Player } from '../Player';
 
 
 export class ClientStatEnterScreen extends React.Component {
 
-
     constructor(props) {
-        super(props);        
+        super(props);
+        
+        this.player = new Player(this.props.navigation.getParam('serverPortNumber', 12345))
+
         this.state = { playerNameState: 'Enter your real name', 
             charNameState: 'Enter you character\'s name',
             ppState: 'Enter PP',

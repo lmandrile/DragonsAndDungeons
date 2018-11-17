@@ -1,8 +1,8 @@
 import { MainMenuScreen } from './Screens/MainMenuScreen.js';
 import { ClientStatEnterScreen } from './Screens/ClientStatEnterScreen.js';
 import { ClientServerSelectScreen } from './Screens/ClientServerSelectScreen.js';
-import {ServerEnterPortScreen} from './Screens/ServerEnterPortScreen.js';
-
+import { ServerEnterPortScreen } from './Screens/ServerEnterPortScreen.js';
+import { ServerMainScreen } from './Screens/ServerMainScreen.js';
 
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
@@ -19,6 +19,9 @@ const RootStack = createStackNavigator({
   },
   serverEnterPortScreen: {
     screen: ServerEnterPortScreen
+  },
+  serverMainScreen: {
+    screen: ServerMainScreen
   }
 });
 

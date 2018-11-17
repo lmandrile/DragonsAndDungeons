@@ -1,36 +1,24 @@
 import React from 'react';
 import { TouchableHighlight, Button, StyleSheet, Text, View, TextInput } from 'react-native';
-import {tcpServer, tcpClient} from './../TCPCommunication.js'
-
 
 export class ClientServerSelectScreen extends React.Component {
-
-
+    
     constructor(props) {
         super(props);        
-        this.state = { serverPort: '12345'};
+        this.state = { serverPortNumber: '12345'};
     }
-    
 
-    _onPressClientButton() {
-      //Alert.alert("Start client!")
-
-      // TODO: complete emptyfunctions 
-      tcppClient = new tcpClient(this.state.serverPort, function(){}, function(){}, function(){})
-      tcppClient.write('Here is some data');
-    }
-  
     render() {
       return (
         <View style={styles.container}>
                 <Text style = {styles.textLabel}>Enter the host's chosen connection code:</Text>
                 <TextInput 
                     style = {styles.textBox}
-                    onChangeText={(serverPort) => this.setState({serverPort})}
-                    value={this.state.serverPort}/>
+                    onChangeText={(serverPortNumber) => this.setState({serverPortNumber})}
+                    value={this.state.serverPortNumber}/>
                 <View style={styles.buttonContainer}>
                     <TouchableHighlight 
-                        onPress={this._onPressClientButton()} 
+                        onPress={() => this.props.navigation.navigate('clientStatEnterScreen', {serverPort: this.state.serverPortNumber})} 
                         underlayColor="white" 
                         style={styles.button}>
                         <Text style={styles.buttonText}>Connect</Text>

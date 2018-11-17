@@ -2,7 +2,7 @@
 var net = require('react-native-tcp');
  
 
-export class tcpServer 
+export class TcpServer 
 {
     constructor(p_port, p_connectFunction, p_dataFunction, p_ErrorFunction) {
         this.server = net.createServer((s) => {
@@ -17,7 +17,7 @@ export class tcpServer
     }
 }
 
-export class tcpClient {
+export class TcpClient {
     constructor(p_port, p_dataFunction, p_closeFunction, p_ErrorFunction) {
         this.client = net.createConnection(p_port);
         this.client.on('data', (data) => p_dataFunction(data));

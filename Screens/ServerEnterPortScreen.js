@@ -10,22 +10,6 @@ export class ServerEnterPortScreen extends React.Component {
     this.state = { serverPort: '12345'};
 }
 
-_onPressServerButton() {
-  //Alert.alert("Start server!");
-  console.log("hello");
-
-  //Example server setup
-  tcppServer = new tcpServer(parseInt(this.state.serverPort), function(connection){
-    Alert.alert("we got something")
-  }, function(data) {
-      Alert.alert(""  + data);
-  },
-  function(error) {
-    Alert.alert("Got an error");
-});
-  // TODO: start server and go to DM page
-}
-
 render() {
   return (
     <View style={styles.container}>
@@ -36,13 +20,14 @@ render() {
                 value={this.state.serverPort}/>
             <View style={styles.buttonContainer}>
                 <TouchableHighlight 
-                    onPress={this._onPressServerButton()} 
+                    onPress={
+                        () => this.props.navigation.navigate('serverMainScreen', { serverPort: this.state.serverPort, })
+                    } 
                     underlayColor="white" 
                     style={styles.button}>
                     <Text style={styles.buttonText}>Host</Text>
                 </TouchableHighlight>
             </View>
-            
                 
     </View>
   );

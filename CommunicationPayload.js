@@ -6,17 +6,26 @@ export class CommunicationPayload {
         this.payloadType = "None"
     }
 
-    setupPlayerInfoPayload(playerName, characterName, aC, passivePerception, maxHP) {
+    setupPlayerInfoPayload(playerInfo) {
         this.payloadType = "PlayerInfo"
+        this.playerInfo = playerInfo
+
+    }
+
+    setupSuccessfulConnectionPayload() {
+        this.payloadType = "SuccessfulConnection"
+        return this
+    }
+
+}
+
+export class PlayerInfo {
+    
+    constructor(playerName, characterName, aC, passivePerception, maxHP) {
         this.playerName = playerName
         this.characterName = characterName
         this.aC = aC
         this.passivePerception = passivePerception
         this.maxHP = maxHP
     }
-
-    setupSuccessfulConnectionPayload() {
-        this.payloadType = "SuccessfulConnection"
-    }
-
 }

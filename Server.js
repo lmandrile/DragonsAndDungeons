@@ -1,5 +1,5 @@
 
-import {Player} from './Player.js'
+import {Client} from './Client.js'
 import { TcpServer } from './TCPCommunication.js'
 import { CommunicationPayload } from './CommunicationPayload.js'
 
@@ -17,29 +17,37 @@ export class Server {
         this.playerList.push(player)
     }
 
-    parseRecievedData(data) {
+    _onData(data) {
+
+        payload = JSON.parse(data);
+
+        if( data.payloadType == "SuccessfulConnection" ) {
+            this.confirmConnection()
+        }
 
     }
+
+    _onConnection(connection) {
+
+    }
+
+    _onError(error) {
+
+    }
+
     setupServer(portNumber) {
         
         console.log("asd" +  portNumber)
         //Example server setup
-        this.tcpServer = new TcpServer(parseInt(portNumber), function(connection){
-            //Alert.alert("we got something")
-            this.confirmConnection(connection)
-            }, 
-            function(data) {
-            //Alert.alert(""  + data);
-            this.parseRecievedData(data)
-        },
-        function(error) {
-        //Alert.alert("Got an error");
-        });
+        this.tcpServer = new TcpServer(parseInt(portNumber), 
+            (connection) => this._onConnection(connection), 
+            (data) => this._onData(data),
+            (error) => this._onError(error));
     }
 
-    async confirmConnection(connection) {
+    async confirmConnection() {
         setTimeout(10000)
-        connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload))
+        this.tcpServer.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload))
     }
 
 

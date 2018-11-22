@@ -1,11 +1,21 @@
 import React from 'react';
 import { TouchableHighlight, Button, StyleSheet, Text, View, TextInput } from 'react-native';
+import { Player } from '../Player';
 
 export class ClientServerSelectScreen extends React.Component {
     
     constructor(props) {
         super(props);        
         this.state = { serverPortNumber: '12345'};
+    }
+
+    _onPress() {
+        this.player = new Player(this.props.navigation.getParam('serverPortNumber', 12345), this._onConnectCallback)
+
+    }
+
+    _onConnectCallback() {
+        this.props.navigation.navigate('clientStatEnterScreen', {serverPort: this.state.serverPortNumber})
     }
 
     render() {
@@ -18,7 +28,7 @@ export class ClientServerSelectScreen extends React.Component {
                     value={this.state.serverPortNumber}/>
                 <View style={styles.buttonContainer}>
                     <TouchableHighlight 
-                        onPress={() => this.props.navigation.navigate('clientStatEnterScreen', {serverPort: this.state.serverPortNumber})} 
+                        onPress={this._onPress()} 
                         underlayColor="white" 
                         style={styles.button}>
                         <Text style={styles.buttonText}>Connect</Text>

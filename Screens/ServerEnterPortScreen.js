@@ -21,7 +21,9 @@ render() {
             <View style={styles.buttonContainer}>
                 <TouchableHighlight 
                     onPress={
-                        () => this.props.navigation.navigate('serverMainScreen', { serverPort: this.state.serverPort, })
+                        () => this.props.navigation.navigate('serverMainScreen', { 
+                            serverPort: this.state.serverPort, 
+                        })
                     } 
                     underlayColor="white" 
                     style={styles.button}>

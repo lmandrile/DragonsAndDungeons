@@ -9,7 +9,8 @@ export class TcpServer
             s.on('connection', (connection) => p_connectFunction(connection));
             s.on('data', (data) => p_dataFunction(data));
             s.on('error', (error) => p_ErrorFunction(error));    
-        }).listen(p_port);
+        })
+        this.server.listen(p_port);
     }
 
     write(data) {

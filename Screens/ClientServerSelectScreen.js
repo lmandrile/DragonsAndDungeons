@@ -15,7 +15,7 @@ export class ClientServerSelectScreen extends React.Component {
     }
 
     _onConnectCallback() {
-        this.props.navigation.navigate('clientStatEnterScreen', {serverPort: this.state.serverPortNumber})
+        this.props.navigation.navigate('clientStatEnterScreen', {client: this.client})
     }
 
     render() {

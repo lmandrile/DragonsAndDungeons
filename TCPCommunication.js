@@ -6,11 +6,30 @@ export class TcpServer
 {
     constructor(p_port, p_connectFunction, p_dataFunction, p_ErrorFunction) {
         this.server = net.createServer((s) => {
-            s.on('connection', (connection) => p_connectFunction(connection));
+            p_connectFunction(s);
             s.on('data', (data) => p_dataFunction(data));
             s.on('error', (error) => p_ErrorFunction(error));    
         })
         this.server.listen(p_port);
+
+        /*let server = net.createServer((socket) => {         
+            console.log("A client connected")
+
+            socket.on('data', (data) => {
+                console.log("Server got some data: " + data)
+            });
+        
+            socket.on('error', (error) => {
+                throw "AlloError";
+            });
+        
+            socket.on('close', (error) => {
+                
+            });
+            }).listen(12345, () => {
+                
+            });
+            this.server = server*/
     }
 
     write(data) {

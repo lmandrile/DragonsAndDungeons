@@ -1,5 +1,7 @@
 import { TcpClient } from './TCPCommunication.js'
 import { CommunicationPayload } from './CommunicationPayload.js'
+var net = require('react-native-tcp');
+
 
 export class Client{
 
@@ -19,9 +21,11 @@ export class Client{
     }*/
 
     _onData(data) {
+        console.log("Client: we got data: " + data);
+        
         payload = JSON.parse(data);
 
-        if( data.payloadType == "SuccessfulConnection" ) {
+        if( payload.payloadType == "SuccessfulConnection" ) {
             this.connectFunction()
         }
     }
@@ -34,7 +38,7 @@ export class Client{
     }
 
     connectToServer(serverPortNumber) {
-        // TODO: complete emptyfunctions 
+        // Connec is not implemented yet in our tcpCom lib, do we need it? I don't think so.
         this.tcpClient = new TcpClient(parseInt(serverPortNumber), 
             (data) => this._onData(data),
             (close) => this._onClose(close),
@@ -42,7 +46,8 @@ export class Client{
 
         
         this.tcpClient.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
-        // Add blocking wait here
+        
+      
     }
 
 

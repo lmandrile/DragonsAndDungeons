@@ -38,16 +38,11 @@ export class Client{
     }
 
     connectToServer(serverPortNumber) {
-        // Connec is not implemented yet in our tcpCom lib, do we need it? I don't think so.
+        // Connect is not implemented yet in our tcpCom lib, do we need it? I don't think so.
         this.tcpClient = new TcpClient(parseInt(serverPortNumber), 
             (data) => this._onData(data),
             (close) => this._onClose(close),
             (error) => this._onError(error));
-
-        
-        this.tcpClient.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
-        
-      
     }
 
 

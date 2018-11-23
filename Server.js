@@ -28,7 +28,7 @@ export class Server {
         
         if (payload.payloadType == "SuccessfulConnection") {
             //this.confirmConnection()
-            connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
+            //connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
         }
         else {
             
@@ -54,6 +54,8 @@ export class Server {
         connection.on('close', (error) => {
 
         });
+
+        connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
     }
 
 

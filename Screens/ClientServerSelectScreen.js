@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, Button, StyleSheet, Text, View, TextInput } from 'react-native';
-import { Client } from '../Client';
+import { Player } from '../Player';
 
 export class ClientServerSelectScreen extends React.Component {
 
@@ -10,7 +10,7 @@ export class ClientServerSelectScreen extends React.Component {
     }
 
     _onPress() {
-        this.client = new Client(this.props.navigation.getParam('serverPortNumber', 12345),
+        this.client = new Player(this.props.navigation.getParam('serverPortNumber', 12345),
             this._onConnectCallback.bind(this))
 
     }

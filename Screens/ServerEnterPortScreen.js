@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, TouchableHighlight, StyleSheet, Text, View, TextInput} from 'react-native';
-import {tcpServer, tcpClient} from './../TCPCommunication.js'
+
 
 
 export class ServerEnterPortScreen extends React.Component {

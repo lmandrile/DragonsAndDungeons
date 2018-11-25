@@ -1,78 +1,66 @@
-
-import { Client } from './Client.js'
-import { TcpServer } from './TCPCommunication.js'
 import { CommunicationPayload } from './CommunicationPayload.js'
 
 var net = require('react-native-tcp');
 
 export class Server {
 
+    constructor(portNumber, onConnectionCallback, onMessageCallback, onErrorCallback, onCloseCallback) {
+        this.onMessageCallback = onMessageCallback
+        this.onErrorCallback = onErrorCallback
+        this.onCloseCallback = onCloseCallback
+        this.onConnectionCallback = onConnectionCallback
 
-
-    constructor(portNumber) {
-        this.portNumber = portNumber
-        this.playerList = []
         this.connectionList = []
-        this.setupServer(portNumber)
+
+        this.server = net.createServer((s) => {
+            this._onConnection(s);
+            s.on('data', (data) => {/*Empty because we don't really need a global 
+        data function as we are doing per socket*/});
+            s.on('error', (error) => {/*Global error, we should put something here TODO*/ });
+        })
+        this.server.listen(parseInt(portNumber));
+        console.log("Server: we're listening on port " + portNumber);
+
     }
 
-    addPlayer(player) {
-        this.playerList.push(player)
-    }
-
-    _onData(data, connection) {
+    _onSingleSocketData(data, connection) {
 
         console.log("Server: we got data: " + data);
 
         payload = JSON.parse(data);
-        
-        if (payload.payloadType == "SuccessfulConnection") {
-            //this.confirmConnection()
-            //connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
-        }
-        else {
-            
-        }
+
+        this.onMessageCallback(payload, connection)
 
     }
 
-    _onError(error, connection) {
+    _onSingleSocketError(error, connection) {
 
     }
+
     _onConnection(connection) {
-        this.connectionList.push(connection)
+
         console.log("Server: we got a connection")
 
         connection.on('data', (data) => {
-            this._onData(data, connection)
+            this._onSingleSocketData(data, connection)
         });
 
         connection.on('error', (error) => {
-            this._onError(error, connection)
+            this._onSingleSocketError(error, connection)
         });
 
-        connection.on('close', (error) => {
+        connection.on('close', () => {
 
         });
 
-        connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
+        onConnectionCallback(connection)
+
     }
-
-
-
-    setupServer(portNumber) {
-        //Example server setup
-        this.tcpServer = new TcpServer(parseInt(portNumber),
-            (connection) => this._onConnection(connection),
-            () => {/*Empty because we don't really need a global 
-                    data function as we are doing per socket*/},
-            () => {/*Global error, we should put something here TODO*/ });
-    }
-
-    async confirmConnection() {
-        setTimeout(10000)
-        this.tcpServer.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
-    }
+    /*
+        async confirmConnection() {
+            setTimeout(10000)
+            this.tcpServer.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
+        }*/
 
 
 

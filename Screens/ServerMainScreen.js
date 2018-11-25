@@ -1,7 +1,6 @@
 import React from 'react';
 import { Alert, TouchableHighlight, StyleSheet, Text, View, TextInput} from 'react-native';
-import {tcpServer, tcpClient} from './../TCPCommunication.js'
-import { Server } from './../Server.js'
+import { DungeonMaster } from './../DungeonMaster'
 
 
 export class ServerMainScreen extends React.Component {
@@ -9,7 +8,7 @@ export class ServerMainScreen extends React.Component {
   constructor(props) {
     super(props);
     Alert.alert(this.props.navigation.state.params.serverPort)
-    server = new Server(this.props.navigation.getParam('serverPort', 12345))
+    server = new DungeonMaster(this.props.navigation.getParam('serverPort', 12345))
 }
 
 

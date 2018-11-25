@@ -10,20 +10,24 @@ export class Client {
 
 
 
-        this.client = net.createConnection(parseInt(serverPortNumber));
-        this.client.on('data', (data) => this._onData(data));
-        this.client.on('close', onCloseCallback(close));
-        this.client.on('error', onErrorCallback(error));
+        this.tcpClient = net.createConnection(parseInt(serverPortNumber));
 
-        console.log("Client: we're connecting to port " + serverPortNumber);
+        this.tcpClient.on('data', (data) => this._onData(data));
+        this.tcpClient.on('close', () => onCloseCallback());
+        this.tcpClient.on('error', (error) => onErrorCallback(error));
+
+        console.log("[Client] we're connecting to port " + serverPortNumber);
     }
 
+    write(data) {
+        this.tcpClient.write(JSON.stringify(data))
+    }
 
     _onData(data) {
-        console.log("Client: we got data: " + data);
+        console.log("[Client] we got data: " + data);
 
         payload = JSON.parse(data);
-        onMessageCallback(payload);
+        this.onMessageCallback(payload);
     }
 
 }

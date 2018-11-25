@@ -10,22 +10,20 @@ export class Server {
         this.onCloseCallback = onCloseCallback
         this.onConnectionCallback = onConnectionCallback
 
-        this.connectionList = []
-
-        this.server = net.createServer((s) => {
+        this.tcpServer = net.createServer((s) => {
             this._onConnection(s);
             s.on('data', (data) => {/*Empty because we don't really need a global 
         data function as we are doing per socket*/});
             s.on('error', (error) => {/*Global error, we should put something here TODO*/ });
         })
-        this.server.listen(parseInt(portNumber));
-        console.log("Server: we're listening on port " + portNumber);
+        this.tcpServer.listen(parseInt(portNumber));
+        console.log("[Server] we're listening on port " + portNumber);
 
     }
 
     _onSingleSocketData(data, connection) {
 
-        console.log("Server: we got data: " + data);
+        console.log("[Server] we got data: " + data);
 
         payload = JSON.parse(data);
 
@@ -39,7 +37,7 @@ export class Server {
 
     _onConnection(connection) {
 
-        console.log("Server: we got a connection")
+        console.log("[Server] we got a connection")
 
         connection.on('data', (data) => {
             this._onSingleSocketData(data, connection)
@@ -53,7 +51,7 @@ export class Server {
 
         });
 
-        onConnectionCallback(connection)
+        this.onConnectionCallback(connection)
 
     }
     /*

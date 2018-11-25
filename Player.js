@@ -11,7 +11,8 @@ export class Player {
             this._onError.bind(this),
             this._onClose.bind(this))
 
-        this.client.write(new CommunicationPayload().setupSuccessfulConnectionPayload())
+
+
     }
 
     /*
@@ -28,15 +29,17 @@ export class Player {
     _onReceiveMessage(payload) {
         if (payload.payloadType == "SuccessfulConnection") {
             this.connectFunction()
+                    //Send test payload to let server know if his player detection works
+        this.client.write(new CommunicationPayload().setupTestPayload())
         }
     }
 
     _onError(error) {
-        console.log("Client: We've got an error with server: " + error)
+        console.log("[Client] We've got an error with server: " + error)
     }
 
-    _onClose(close) {
-        console.log("Client: Connection to server closed")
+    _onClose() {
+        console.log("[Client] Connection to server closed")
     }
 
 

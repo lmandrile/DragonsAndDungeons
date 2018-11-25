@@ -17,6 +17,11 @@ export class CommunicationPayload {
         return this
     }
 
+    setupTestPayload() {
+        this.payloadType = "TestPayload"
+        return this
+    }
+
 }
 
 export class PlayerInfo {

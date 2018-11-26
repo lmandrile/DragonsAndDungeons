@@ -4,19 +4,17 @@ var net = require('react-native-tcp');
 
 export class Client {
 
-    constructor(serverPortNumber, onMessageCallback, onErrorCallback, onCloseCallback) {
+    constructor(serverPortNumber, serverIP, onMessageCallback, onErrorCallback, onCloseCallback) {
 
         this.onMessageCallback = onMessageCallback
 
 
-
-        this.tcpClient = net.createConnection(parseInt(serverPortNumber));
+        console.log("[Client] we're trying to connect to IP: " + serverIP + "On port: "+ serverPortNumber)
+        this.tcpClient = net.createConnection(parseInt(serverPortNumber), serverIP);
 
         this.tcpClient.on('data', (data) => this._onData(data));
         this.tcpClient.on('close', () => onCloseCallback());
         this.tcpClient.on('error', (error) => onErrorCallback(error));
-
-        console.log("[Client] we're connecting to port " + serverPortNumber);
     }
 
     write(data) {

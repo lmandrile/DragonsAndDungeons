@@ -9,6 +9,7 @@ export class CommunicationPayload {
     setupPlayerInfoPayload(playerInfo) {
         this.payloadType = "PlayerInfo"
         this.playerInfo = playerInfo
+        return this
 
     }
 
@@ -22,6 +23,7 @@ export class CommunicationPayload {
         return this
     }
 
+    
 }
 
 export class PlayerInfo {

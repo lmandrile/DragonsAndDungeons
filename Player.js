@@ -3,10 +3,11 @@ import { CommunicationPayload } from "./CommunicationPayload"
 
 export class Player {
 
-    constructor(serverPortNumber, connectionCallback) {
+    constructor(serverPortNumber, serverIP, connectionCallback) {
         this.connectFunction = connectionCallback
 
         this.client = new Client(serverPortNumber,
+            serverIP,
             this._onReceiveMessage.bind(this),
             this._onError.bind(this),
             this._onClose.bind(this))
@@ -15,16 +16,16 @@ export class Player {
 
     }
 
-    /*
+    
     sendPlayerInfo(playerName, characterName, aC, passivePerception, maxHP) {
-        this.tcpClient.write(new CommunicationPayload().setupPlayerInfoPayload(
+        this.client.write(new CommunicationPayload().setupPlayerInfoPayload(
             playerName,
             characterName,
             aC,
             passivePerception,
             maxHP
         ))
-    }*/
+    }
 
     _onReceiveMessage(payload) {
         if (payload.payloadType == "SuccessfulConnection") {

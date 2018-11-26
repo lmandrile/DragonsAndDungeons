@@ -6,13 +6,16 @@ export class ClientServerSelectScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { serverPortNumber: '12345' };
+        this.state = {
+            serverPortNumber: '12345',
+            serverIP: '192.168.'
+        };
     }
 
     _onPress() {
-        this.player = new Player(this.props.navigation.getParam('serverPortNumber', 12345),
+        this.player = new Player(this.state.serverPortNumber,
+            this.state.serverIP,
             this._onConnectCallback.bind(this))
-
     }
 
     _onConnectCallback() {
@@ -27,6 +30,10 @@ export class ClientServerSelectScreen extends React.Component {
                     style={styles.textBox}
                     onChangeText={(serverPortNumber) => this.setState({ serverPortNumber })}
                     value={this.state.serverPortNumber} />
+                <TextInput
+                    style={styles.textBox}
+                    onChangeText={(serverIP) => this.setState({ serverIP })}
+                    value={this.state.serverIP} />
                 <View style={styles.buttonContainer}>
                     <TouchableHighlight
                         onPress={() => this._onPress()}

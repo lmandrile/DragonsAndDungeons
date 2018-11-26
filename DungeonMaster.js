@@ -30,24 +30,25 @@ export class DungeonMaster {
 
     _onReceiveMessage(message, connection) {
 
-        sendingPlayer = null
+        sendingPlayerIndex = null
 
         this.playerList.forEach(element => {
             if (connection == element.connection) {
-                sendingPlayer = element
+                sendingPlayerIndex = this.playerList.indexOf(element)
             }
         });
-        if (sendingPlayer != null) {
-            if (payload.payloadType == "SuccessfulConnection") {
-                //this.confirmConnection()
-                //connection.write(JSON.stringify(new CommunicationPayload().setupSuccessfulConnectionPayload()))
+        if (sendingPlayerIndex != null) {
+            if (message.payloadType == "PlayerInfo") {
+                //Maybe check if playerinfo is valid?
+                this.playerList[sendingPlayerIndex].addPlayerInfo(message.playerInfo)
+                console.log("[Server] We recieved player[" + this.playerList[sendingPlayerIndex].playerNumber + "]'s player info: \n"
+                    + JSON.stringify(this.playerList[sendingPlayerIndex].playerInfo))
             }
-            else if (payload.payloadType == "TestPayload") {
-                console.log("[Server] We recieved a test payload from player[" + sendingPlayer.playerNumber + "].")
+            else if (message.payloadType == "TestPayload") {
+                console.log("[Server] We recieved a test message from player[" + this.playerList[sendingPlayerIndex].playerNumber + "].")
             }
         }
-        else 
-        {
+        else {
             console.log("[Server] Sending player was not in player list.")
         }
 

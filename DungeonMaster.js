@@ -1,5 +1,6 @@
 import { Server } from "./Server.js";
 import { CommunicationPayload } from "./CommunicationPayload.js";
+import { Player } from "./Player.js";
 
 class PlayerSeenByServer {
     constructor(connection, playerNumber) {
@@ -14,12 +15,16 @@ class PlayerSeenByServer {
 
 export class DungeonMaster {
 
-    constructor(serverPortNumber) {
-        this.Server = new Server(serverPortNumber,
+    constructor(serverPortNumber, onPlayerDCCallback = null, onErrorCallback = null) {
+        this.server = new Server(serverPortNumber,
             this._onConnection.bind(this),
             this._onReceiveMessage.bind(this),
             this._onError.bind(this),
-            this._onClose.bind(this))
+            this._onClose.bind(this));
+        
+        //TODO implement callbacks in front end
+        this.onPlayerDCCallback = onPlayerDCCallback
+        this.onErrorCallback = onErrorCallback
         this.playerList = []
     }
 
@@ -30,36 +35,43 @@ export class DungeonMaster {
 
     _onReceiveMessage(message, connection) {
 
-        sendingPlayerIndex = null
+        sendingPlayer = null
 
         this.playerList.forEach(element => {
             if (connection == element.connection) {
-                sendingPlayerIndex = this.playerList.indexOf(element)
+                sendingPlayer = this.playerList[this.playerList.indexOf(element)]
             }
         });
-        if (sendingPlayerIndex != null) {
+        if (sendingPlayer != null) {
             if (message.payloadType == "PlayerInfo") {
                 //Maybe check if playerinfo is valid?
-                this.playerList[sendingPlayerIndex].addPlayerInfo(message.playerInfo)
-                console.log("[Server] We recieved player[" + this.playerList[sendingPlayerIndex].playerNumber + "]'s player info: \n"
-                    + JSON.stringify(this.playerList[sendingPlayerIndex].playerInfo))
+                sendingPlayer.addPlayerInfo(message.playerInfo)
+
+                this.server.log("We recieved player[" + sendingPlayer.playerNumber + "]'s player info: \n"
+                    + JSON.stringify(sendingPlayer.playerInfo))
+
+                //TODO Send info to front-end                
+            }
+            else if (message.payloadType == "Close") {
+                this.onPlayerDCCallback(sendingPlayer)
             }
             else if (message.payloadType == "TestPayload") {
-                console.log("[Server] We recieved a test message from player[" + this.playerList[sendingPlayerIndex].playerNumber + "].")
+                this.server.log("We recieved a test message from player[" + sendingPlayer.playerNumber + "].")
             }
         }
         else {
-            console.log("[Server] Sending player was not in player list.")
+            this.server.log("Sending player was not in player list.")
         }
-
     }
 
     _onError(error, connection) {
-
+        this.onErrorCallback(error)
     }
 
-    _onClose(connection) {
-
+    _onClose(close) {
+        this.playerList.forEach((player) => {
+            player.connection.write(new CommunicationPayload().setupClosePayload())
+        })
     }
 
 

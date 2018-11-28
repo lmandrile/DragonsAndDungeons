@@ -1,4 +1,3 @@
-import { CommunicationPayload } from './CommunicationPayload.js'
 var net = require('react-native-tcp');
 
 
@@ -9,7 +8,7 @@ export class Client {
         this.onMessageCallback = onMessageCallback
 
 
-        console.log("[Client] we're trying to connect to IP: " + serverIP + "On port: "+ serverPortNumber)
+        this.log("we're trying to connect to IP: " + serverIP + " On port: "+ serverPortNumber)
         this.tcpClient = net.createConnection(parseInt(serverPortNumber), serverIP);
 
         this.tcpClient.on('data', (data) => this._onData(data));
@@ -22,10 +21,14 @@ export class Client {
     }
 
     _onData(data) {
-        console.log("[Client] we got data: " + data);
+        this.log("we got data: " + data);
 
         payload = JSON.parse(data);
         this.onMessageCallback(payload);
+    }
+
+    log(string) {
+        console.log("[Client] " + string)
     }
 
 }

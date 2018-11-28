@@ -23,6 +23,11 @@ export class CommunicationPayload {
         return this
     }
 
+    setupClosePayload() {
+        this.payloadType = "Close"
+        return this
+    }
+
     
 }
 

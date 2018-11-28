@@ -3,7 +3,7 @@ import { CommunicationPayload } from "./CommunicationPayload"
 
 export class Player {
 
-    constructor(serverPortNumber, serverIP, connectionCallback) {
+    constructor(serverPortNumber, serverIP, connectionCallback, onServerCloseCallback = null, onErrorCallback = null) {
         this.connectFunction = connectionCallback
 
         this.client = new Client(serverPortNumber,
@@ -12,11 +12,12 @@ export class Player {
             this._onError.bind(this),
             this._onClose.bind(this))
 
-
+        this.onServerCloseCallback = onServerCloseCallback
+        this.onErrorCallback = onErrorCallback
 
     }
 
-    
+
     sendPlayerInfo(playerName, characterName, aC, passivePerception, maxHP) {
         this.client.write(new CommunicationPayload().setupPlayerInfoPayload(
             playerName,
@@ -30,17 +31,21 @@ export class Player {
     _onReceiveMessage(payload) {
         if (payload.payloadType == "SuccessfulConnection") {
             this.connectFunction()
-                    //Send test payload to let server know if his player detection works
-        this.client.write(new CommunicationPayload().setupTestPayload())
+            //Send test payload to let server know if his player detection works
+            this.client.write(new CommunicationPayload().setupTestPayload())
+        } else if (payload.payloadType == "Close") {
+            this.onServerCloseCallback()
         }
     }
 
     _onError(error) {
-        console.log("[Client] We've got an error with server: " + error)
+        this.client.log("We've got an error with server: " + error)
+        this.onErrorCallback()
     }
 
     _onClose() {
-        console.log("[Client] Connection to server closed")
+        this.client.log("Connection to server closed")
+        this.client.write(new CommunicationPayload().setupClosePayload())
     }
 
 

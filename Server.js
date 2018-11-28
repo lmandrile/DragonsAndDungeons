@@ -1,5 +1,3 @@
-import { CommunicationPayload } from './CommunicationPayload.js'
-
 var net = require('react-native-tcp');
 
 export class Server {
@@ -14,16 +12,17 @@ export class Server {
             this._onConnection(s);
             s.on('data', (data) => {/*Empty because we don't really need a global 
         data function as we are doing per socket*/});
-            s.on('error', (error) => {/*Global error, we should put something here TODO*/ });
+            s.on('error', (error) => { this.onErrorCallback(error)});
+            s.on('close', () => {this.onCloseCallback(s)} )
         })
         this.tcpServer.listen(parseInt(portNumber));
-        console.log("[Server] we're listening on port " + portNumber);
+        this.log("we're listening on port " + portNumber);
 
     }
 
     _onSingleSocketData(data, connection) {
 
-        console.log("[Server] we got data: " + data);
+        this.log("we got data:" + data)
 
         payload = JSON.parse(data);
 
@@ -32,12 +31,12 @@ export class Server {
     }
 
     _onSingleSocketError(error, connection) {
-
+        this.onErrorCallback(error)
     }
 
     _onConnection(connection) {
 
-        console.log("[Server] we got a connection")
+        this.log("we got a connection")
 
         connection.on('data', (data) => {
             this._onSingleSocketData(data, connection)
@@ -53,6 +52,10 @@ export class Server {
 
         this.onConnectionCallback(connection)
 
+    }
+
+    log(string) {
+        console.log("[SERVER]" + String)
     }
     /*
         async confirmConnection() {

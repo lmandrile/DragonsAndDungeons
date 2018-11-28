@@ -13,7 +13,7 @@ export class ServerMainScreen extends React.Component {
         server = new DungeonMaster(this.props.navigation.getParam('serverPort'))
         // Get Local IP
         this.state = {serverIP: "NOIP" }
-        NetworkInfo.getIPAddress(function(ip) {
+        NetworkInfo.getIPV4Address(function(ip) {
             self.setState({ serverIP: ip });
         })       
     }
